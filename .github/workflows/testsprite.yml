@@ -25,4 +25,4 @@ jobs:
           ./install.sh
           
           # 4. Run the test (using 'testsprite' directly if the installer adds it to PATH)
-          testsprite run --file app.py --token $TESTSPRITE_TOKEN
+          ./bin/testsprite run --file app.py --token $TESTSPRITE_TOKEN

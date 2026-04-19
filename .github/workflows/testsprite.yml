@@ -11,17 +11,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: Install TestSprite
-        run: |
-          pip install testsprite
-
-      - name: Run AI Tests
+      - name: Run TestSprite AI
         env:
+          # This pulls the secret you saved earlier
           TESTSPRITE_TOKEN: ${{ secrets.TESTSPRITE_TOKEN }}
         run: |
-          testsprite run ./app.py
+          # This command downloads and runs the TestSprite setup directly
+          curl -fsSL https://get.testsprite.com/install.sh | bash
+          ./testsprite run --file app.py --token $TESTSPRITE_TOKEN

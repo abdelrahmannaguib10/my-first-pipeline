@@ -11,11 +11,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run TestSprite via Docker
-        # This tells GitHub to pull the "pre-made box" from Docker Hub
-        uses: docker://testsprite/testsprite-cli:latest
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install TestSprite directly
+        # If the standard name fails, we install directly from the source
+        run: |
+          python -m pip install --upgrade pip
+          pip install testsprite-python-sdk
+
+      - name: Run AI Tests
         env:
           TESTSPRITE_TOKEN: ${{ secrets.TESTSPRITE_TOKEN }}
-        with:
-          # This passes the command directly to the tool inside the box
-          args: run --file app.py
+        run: |
+          # This runs the sdk we just installed
+          testsprite-python run --file app.py --token $TESTSPRITE_TOKEN

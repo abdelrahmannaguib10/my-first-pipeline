@@ -13,9 +13,16 @@ jobs:
 
       - name: Run TestSprite AI
         env:
-          # This pulls the secret you saved earlier
           TESTSPRITE_TOKEN: ${{ secrets.TESTSPRITE_TOKEN }}
         run: |
-          # This command downloads and runs the TestSprite setup directly
-          curl -fsSL https://get.testsprite.com/install.sh | bash
-          ./testsprite run --file app.py --token $TESTSPRITE_TOKEN
+          # 1. Download the tool
+          curl -fsSL https://get.testsprite.com/install.sh -o install.sh
+          
+          # 2. Give the computer permission to run the installer
+          chmod +x install.sh
+          
+          # 3. Run the installer
+          ./install.sh
+          
+          # 4. Run the test (using 'testsprite' directly if the installer adds it to PATH)
+          testsprite run --file app.py --token $TESTSPRITE_TOKEN

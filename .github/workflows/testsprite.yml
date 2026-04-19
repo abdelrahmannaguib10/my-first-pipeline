@@ -3,8 +3,6 @@ name: TestSprite AI Testing
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   test:
@@ -13,9 +11,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run TestSprite
-        # This is the step that triggers the AI agent
-        uses: testsprite/testsprite-action@v1
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          # You will get this API Key from your TestSprite dashboard
-          token: ${{ secrets.TESTSPRITE_TOKEN }}
+          python-version: '3.9'
+
+      - name: Install TestSprite
+        run: |
+          pip install testsprite
+
+      - name: Run AI Tests
+        env:
+          TESTSPRITE_TOKEN: ${{ secrets.TESTSPRITE_TOKEN }}
+        run: |
+          testsprite run ./app.py

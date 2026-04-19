@@ -11,18 +11,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run TestSprite AI
+      - name: Run TestSprite via Docker
+        # This tells GitHub to pull the "pre-made box" from Docker Hub
+        uses: docker://testsprite/testsprite-cli:latest
         env:
           TESTSPRITE_TOKEN: ${{ secrets.TESTSPRITE_TOKEN }}
-        run: |
-          # 1. Download the tool
-          curl -fsSL https://get.testsprite.com/install.sh -o install.sh
-          
-          # 2. Give the computer permission to run the installer
-          chmod +x install.sh
-          
-          # 3. Run the installer
-          ./install.sh
-          
-          # 4. Run the test (using 'testsprite' directly if the installer adds it to PATH)
-          ./bin/testsprite run --file app.py --token $TESTSPRITE_TOKEN
+        with:
+          # This passes the command directly to the tool inside the box
+          args: run --file app.py

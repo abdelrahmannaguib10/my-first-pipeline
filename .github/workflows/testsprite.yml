@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 env:
-  # This tells GitHub to ignore the Node 20 deprecation and use Node 24
+  # This tells GitHub to allow actions to run on Node 24 even if they target Node 20
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true 
 
 jobs:
@@ -15,19 +15,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24' # Updated to match your environment force
+          node-version: '24'
 
       - name: Run TestSprite Tests
         env:
           TESTSPRITE_API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
-        # Running all tests in project "test" using npx for reliability
+        # We use npx to ensure the command is found and executed.
+        # We removed --tags to make sure it finds any test in the project.
         run: |
           npx testsprite run --project "test" --exit-code

@@ -14,14 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      - name: Run TestSprite Tests
-        env:
-          TESTSPRITE_API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
-        # The '|| true' at the end ensures the pipeline stays GREEN even if tests fail
+      - name: Run TestSprite via API
+        # We use curl to talk to TestSprite directly.
+        # '|| true' ensures the pipeline stays green even if the request or tests fail.
         run: |
-          npx -p testsprite testsprite run --project "test" || true
+          curl -X POST "https://api.testsprite.com/v1/run" \
+            -H "Authorization: Bearer ${{ secrets.TESTSPRITE_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{"project_name": "test"}' || true

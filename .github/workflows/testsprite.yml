@@ -24,13 +24,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install TestSprite
-        run: npm install -g testsprite
-
-      - name: Run Specific TestSprite Tests
+      - name: Run TestSprite Tests
         env:
           TESTSPRITE_API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
-        # Replace 'smoke' with the actual tag or suite name you want to run
-        # Added --fail-fast or equivalent logic to ensure exit code is non-zero on failure
+        # Removed --tags to ensure it finds tests. 
+        # Using npx to fix the 'command not found' error.
         run: |
-          testsprite run --project "test" --tags "smoke" --exit-code
+          npx testsprite run --project "test" --exit-code

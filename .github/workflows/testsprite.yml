@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
 
 env:
+  # This tells GitHub to ignore the Node 20 deprecation and use Node 24
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true 
 
 jobs:
@@ -22,12 +23,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24' # Updated to match your environment force
 
       - name: Run TestSprite Tests
         env:
           TESTSPRITE_API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
-        # Removed --tags to ensure it finds tests. 
-        # Using npx to fix the 'command not found' error.
+        # Running all tests in project "test" using npx for reliability
         run: |
           npx testsprite run --project "test" --exit-code
